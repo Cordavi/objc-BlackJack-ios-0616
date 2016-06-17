@@ -32,9 +32,9 @@
         if (self.player.busted || self.house.busted) {
             break;
         }
-        [self processPlayerTurn];
+        [self processTurn:self.player];
         cardCountPlayer ++;
-        [self processHouseTurn];
+        [self processTurn:self.house];
         cardCountHouse ++;
     }
     NSLog(@"\n%@\n", self.player.description);
@@ -43,11 +43,11 @@
 
 - (void)dealNewRound {
     while ([self.house.cardsInHand count] < 2 && [self.player.cardsInHand count] < 2) {
-        [self dealCardToPlayer];
+        [self dealCard:self.player];
         if (self.player.busted) {
             break;
         }
-        [self dealCardToHouse];
+        [self dealCard:self.player];
         if (self.house.busted) {
             break;
         }
@@ -56,26 +56,16 @@
     //NSLog(@"\n%@\n%@", self.player.description, self.house.description);
 }
 
-- (void)dealCardToPlayer {
-    [self.player acceptCard:[self.deck drawNextCard]];
-    
+- (void)dealCard:(FISBlackjackPlayer *)player {
+    [player acceptCard:[self.deck drawNextCard]];
+    //NSLog(@"Hello! It's me!");
 }
 
-- (void)dealCardToHouse {
-    [self.house acceptCard:[self.deck drawNextCard]];
-    
-}
-
-- (void)processPlayerTurn {
-    if (self.player.shouldHit && !(self.player.stayed) && !(self.player.busted)) {
-        [self dealCardToPlayer];
+- (void)processTurn:(FISBlackjackPlayer *)player {
+    if (player.shouldHit && !(player.stayed) && !(player.busted)) {
+        [self dealCard:player];
     }
-}
-
-- (void)processHouseTurn {
-    if (self.house.shouldHit && !(self.house.stayed) && !(self.house.busted)) {
-        [self dealCardToHouse];
-    }
+    //NSLog(@"Hello! It's me!");
 }
 
 - (BOOL)houseWins {
